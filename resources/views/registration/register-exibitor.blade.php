@@ -139,7 +139,7 @@
 
                <div class=" grid md:grid-cols-2 grid-cols-1 gap-4">
                    <div class="md:hidden block">
-                       <img src="storage/img/plan.jpeg" alt="">
+                       <img src="storage/img/plan-2.jpg" alt="">
                    </div>
                    <div class=" flex justify-center w-full">
                        <form action="{{ route('contact') }}" method="POST" class="md:w-5/6 w-full">
@@ -321,7 +321,7 @@
                        </form>
                    </div>
                    <div class="hidden md:block overflow-hidden">
-                       <img class="  transition-all " src="storage/img/plan.jpeg" alt="">
+                       <img class="  transition-all " src="storage/img/plan-2.jpg" alt="">
                    </div>
                </div>
 
