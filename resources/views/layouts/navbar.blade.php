@@ -19,7 +19,7 @@
                     <x-nav-link-primary class="toggleIconall whitespace-nowrap links text-white " :active="request()->routeIs('conference.index')"
                         href="{{ route('conference.index') }}">Conference Brochure</x-nav-link-primary>
                         <x-nav-link-primary class="toggleIconall whitespace-nowrap links text-white " :active="request()->routeIs('exhibitor_list.index')"
-                            href="{{ route('exhibitor_list.index') }}">Exhibitor List 2023</x-nav-link-primary>
+                            href="{{ route('exhibitor_list.index') }}">Exhibitor List 2025</x-nav-link-primary>
                 </ul>
 
                <div class="flex space-x-4">
@@ -30,7 +30,7 @@
                     </x-button></a>
                 </div>
                 <div>
-                    <a href="https://www.showwave.co.za/online/ipppex">
+                <a href="{{ route('register.visitor') }}">
                     <x-button class=" register-btn">
                         Visitors
                     </x-button></a>

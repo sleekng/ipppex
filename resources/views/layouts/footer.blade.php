@@ -28,7 +28,7 @@
        <div class="flex flex-col space-y-2">
            <a href="tel:+2348035457443" class=" text-primarycolor">0803545 7443</a>
            <a href="tel:+234803583793" class=" text-primarycolor">08035837934</a>
-           <a href="tel:+2348064885338" class=" text-primarycolor">08064885338</a>
+           <a href="tel:+2348064885338" class=" text-primarycolor">09069508412</a>
        </div>
        <div class="mt-2 font-bold">
            Email:

@@ -16,7 +16,7 @@
             <div class="grid md:grid-cols-2 md:gap-10 gap-4 grid-cols-1">
                 <div data-aos="fade-right" data-aos-duration="3000"
                     class="rounded-xl md:hidden block border-b-8 border-[#F0D6D7] overflow-hidden md:mt-20 md:h-[300px] h-[220px] mb-4 w-full object-fill relative">
-                    <img src="storage/img/slide/slilde1.jpg" class="   absolute w-full" alt="" />
+                    <img src="storage/img/slide/registration-stand.jpg" class="   absolute w-full" alt="" />
                 </div>
 
                 <div class="">
@@ -58,7 +58,7 @@
 
                 <div
                     class="rounded-xl hidden md:block border-b-8 border-[#F0D6D7] overflow-hidden md:mt-20 md:h-[300px] h-[220px] mb-4 w-full object-fill relative">
-                    <img src="storage/img/slide/slilde1.jpg" class="   absolute w-full" alt="" />
+                    <img src="storage/img/slide/registration-stand.jpg" class="   absolute w-full" alt="" />
                 </div>
             </div>
         </div>
@@ -127,12 +127,12 @@
 
                 <!-- Validation Errors -->
 
-                <form method="POST" action="{{ route('register') }}" class=" w-full gap-x-10 md:grid grid-cols-2">
+                <form method="POST" action="{{ route('register') }}" class=" w-full gap-x-10 md:grid grid-cols-2" id="visitorRegistrationForm">
                     @csrf
 
                     <div class="mt-4 w-full">
                         <x-input name="name" class="bg-transparent w-full" for="name" :value="old('name')"
-                            placeholder="Enter your full name" label="Full Name">
+                            placeholder="Enter your full name" label="Full Name" required>
                             <x-slot name="icon">
                                 <i class="fa-thin fa-user"></i>
                             </x-slot>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="mt-4 w-full">
                         <x-input class=" w-full bg-transparent" name="email" for="email" :value="old('email')"
-                            placeholder="Enter your email address" label="Email Address">
+                            placeholder="Enter your email address" label="Email Address" required>
                             <x-slot name="icon">
                                 <i class="fa-sharp fa-light fa-at"></i>
                             </x-slot>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="mt-4 w-full">
                         <x-input class=" w-full bg-transparent" name="phone_number" for="phone_number" :value="old('phone_number')"
-                            placeholder="Enter your Phone Number" label="Phone Number">
+                            placeholder="Enter your Phone Number" label="Phone Number" required>
                             <x-slot name="icon">
                                 <i class="fa-sharp fa-light fa-phone"></i>
                             </x-slot>
@@ -167,7 +167,7 @@
                     <div class="mt-4 w-full">
                         <x-input :value="old('organization_company')" class=" w-full bg-transparent" name="organization_company"
                             for="organization_company" placeholder="Enter your Organisation / Company"
-                            label="Organisation ">
+                            label="Organisation " required>
                             <x-slot name="icon">
                                 <i class="fa-thin fa-buildings"></i>
                             </x-slot>
@@ -178,7 +178,7 @@
                     </div>
                     <div class=" w-full">
                         <x-input :value="old('role')" class=" w-full bg-transparent" name="role" for="Designation"
-                            placeholder="Enter your designation" label="Designation">
+                            placeholder="Enter your designation" label="Designation" required>
                             <x-slot name="icon">
                                 <i class="fa-light fa-sitemap"></i>
                             </x-slot>
@@ -199,7 +199,7 @@
 
                             <select
                                 class="bg-transparent focus-visible:outline-none mt-2 border w-full border-[#D9D2D2] rounded-[12px] pl-14 h-[56px]"
-                                name="ref" id="ref" :value="old('ref')">
+                                name="ref" id="ref" :value="old('ref')" required>
 
                                 <option disabled selected>Select</option>
 
@@ -228,9 +228,9 @@
                             <div class="text-[10px] text-red-500">{{ $message }}</div>
                         @enderror
                         <x-radio :value="old('first_time')" onchange="showStand()" name="first_time" value="yes"
-                            id="firstYes" label="Yes" /><br><br>
+                            id="firstYes" label="Yes" required /><br><br>
                         <x-radio :value="old('first_time')" onchange="showStand()" name="first_time" value="no"
-                            label="No" id="firstNo" /><br><br>
+                            label="No" id="firstNo" required /><br><br>
                     </div>
 
 
@@ -288,15 +288,51 @@
                 </form>
 
                 <script>
-                    const submitButton = document.getElementById("registration-1-btn"); // Replace with your form ID
-                    const container = document.getElementById("registration-1"); // Replace with your form ID
-                    const loading = document.getElementById("loading"); // Replace with your form ID
+                    const visitorForm = document.getElementById("visitorRegistrationForm");
+                    const submitButton = document.getElementById("registration-1-btn");
+                    const container = document.getElementById("registration-1");
+                    const loading = document.getElementById("loading");
 
-                    console.log(submitButton);
-                    submitButton.addEventListener("click", function() {
-                        loading.classList.remove('hidden')
-                        loading.classList.add('flex')
-                        container.classList.add('hidden')
+                    // Use form submit event instead of button click to prevent conflicts
+                    visitorForm.addEventListener("submit", function(e) {
+                        e.preventDefault(); // Prevent default form submission
+                        
+                        // Basic form validation
+                        const requiredFields = visitorForm.querySelectorAll('[required]');
+                        let isValid = true;
+                        
+                        requiredFields.forEach(field => {
+                            if (!field.value.trim()) {
+                                isValid = false;
+                                field.classList.add('border-red-500');
+                            } else {
+                                field.classList.remove('border-red-500');
+                            }
+                        });
+                        
+                        // Check if at least one radio button is selected
+                        const radioButtons = visitorForm.querySelectorAll('input[name="first_time"]');
+                        const radioSelected = Array.from(radioButtons).some(radio => radio.checked);
+                        if (!radioSelected) {
+                            isValid = false;
+                            alert('Please select whether this is your first time at NIPEX/IPPPEX');
+                            return;
+                        }
+                        
+                        if (!isValid) {
+                            alert('Please fill in all required fields');
+                            return;
+                        }
+                        
+                        // Show loading state
+                        loading.classList.remove('hidden');
+                        loading.classList.add('flex');
+                        container.classList.add('hidden');
+                        
+                        // Submit the form programmatically after a brief delay for UX
+                        setTimeout(() => {
+                            visitorForm.submit();
+                        }, 1000);
                     });
                 </script>
 

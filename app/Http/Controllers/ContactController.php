@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ExhibitorsExport;
 use App\Mail\ExhibitorsMail;
 use App\Models\Contact;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
@@ -30,7 +30,54 @@ class ContactController extends Controller
 
     public function exportToExcel()
     {
-        return Excel::download(new ExhibitorsExport(), 'Exhibitors.xlsx');
+        $exhibitors = Contact::all();
+        
+        $filename = 'exhibitors_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($exhibitors) {
+            $file = fopen('php://output', 'w');
+            
+            // Add CSV headers
+            fputcsv($file, [
+                'Company Name',
+                'Country/Region',
+                'State',
+                'Booking Status',
+                'Stand Number',
+                'Question About',
+                'Question',
+                'Phone Number',
+                'Email',
+                'Tag Number',
+                'Registration Date'
+            ]);
+            
+            // Add data rows
+            foreach ($exhibitors as $exhibitor) {
+                fputcsv($file, [
+                    $exhibitor->company_name,
+                    $exhibitor->country_region,
+                    $exhibitor->state,
+                    $exhibitor->booking,
+                    $exhibitor->stand,
+                    $exhibitor->q_about,
+                    $exhibitor->question,
+                    $exhibitor->phone_number,
+                    $exhibitor->email,
+                    $exhibitor->tagnumber,
+                    $exhibitor->created_at->format('Y-m-d H:i:s')
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
     }
 
 
@@ -87,64 +134,42 @@ class ContactController extends Controller
         if($request->booking=='no'){
             $stand = $request->stand;
         }else{
-            
             $stand = null;
         }
 
-        $tagnumber = Str::random(6);
-
-   
-        if(Contact::where('tagnumber', $tagnumber)->get()){
-
+        // Generate unique tag number
+        do {
             $tagnumber = Str::random(6);
+        } while(Contact::where('tagnumber', $tagnumber)->exists());
 
-            Contact::create([
-                'company_name' => $request->company_name,
-                'q_about' => $request->q_about,
-                'country_region' => $request->country_region,
-                'state' => $request->state,
-                'booking' => $request->booking,
-                'stand' => $stand,
-                'tagnumber' => $tagnumber,
-                'phone_number' => $request->phone_number,
-                'email' => $request->email,
-                'question' => $request->question
-            ]);
-    
-            
-            $regData = [
-                'email' => $request->email,
-                'company_name' => $request->company_name,
-                'tagnumber' => $tagnumber
-            ];
-    
+        // Create contact record
+        Contact::create([
+            'company_name' => $request->company_name,
+            'q_about' => $request->q_about,
+            'country_region' => $request->country_region,
+            'state' => $request->state,
+            'booking' => $request->booking,
+            'stand' => $stand,
+            'tagnumber' => $tagnumber,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'question' => $request->question
+        ]);
+
+        // Prepare registration data for email
+        $regData = [
+            'email' => $request->email,
+            'company_name' => $request->company_name,
+            'tagnumber' => $tagnumber
+        ];
+
+        // Send confirmation email with error handling
+        try {
             Mail::to($request->email)->send(new ExhibitorsMail($regData));
-
-        }else{
-           
-
-            Contact::create([
-                'company_name' => $request->company_name,
-                'q_about' => $request->q_about,
-                'country_region' => $request->country_region,
-                'state' => $request->state,
-                'booking' => $request->booking,
-                'stand' => $stand,
-                'tagnumber' => $tagnumber,
-                'phone_number' => $request->phone_number,
-                'email' => $request->email,
-                'question' => $request->question
-            ]);
-    
-            
-            $regData = [
-                'email' => $request->email,
-                'company_name' => $request->company_name,
-                'tagnumber' => $tagnumber
-            ];
-    
-            Mail::to($request->email)->send(new ExhibitorsMail($regData));
-            
+        } catch (\Exception $e) {
+            // Log the error but don't fail the registration
+            Log::error('Failed to send exhibitor confirmation email: ' . $e->getMessage());
+            // You can also send to admin or handle differently
         }
 
 

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\NewslettersExport;
 use App\Models\NewsletterSubscription;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Response;
 
 class NewsletterSubscriptionController extends Controller
 {
@@ -26,7 +25,36 @@ class NewsletterSubscriptionController extends Controller
 
     public function exportToExcel()
     {
-        return Excel::download(new NewslettersExport(), 'Newsletters.xlsx');
+        $newsletters = NewsletterSubscription::all();
+        
+        $filename = 'newsletters_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($newsletters) {
+            $file = fopen('php://output', 'w');
+            
+            // Add CSV headers
+            fputcsv($file, [
+                'Email',
+                'Subscription Date'
+            ]);
+            
+            // Add data rows
+            foreach ($newsletters as $newsletter) {
+                fputcsv($file, [
+                    $newsletter->email,
+                    $newsletter->created_at->format('Y-m-d H:i:s')
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
     }
 
 

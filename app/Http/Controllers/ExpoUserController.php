@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\VisitorsExport;
 use App\Mail\Registered;
 use App\Models\Contact;
 use App\Models\ExpoUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Http\Response;
 // use PragmaRX\Countries\Package\Countries;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ExpoUserController extends Controller
 {
@@ -26,7 +26,52 @@ class ExpoUserController extends Controller
 
     public function exportToExcel()
     {
-        return Excel::download(new VisitorsExport(), 'Visitors.xlsx');
+        $visitors = ExpoUser::all();
+        
+        $filename = 'visitors_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($visitors) {
+            $file = fopen('php://output', 'w');
+            
+            // Add CSV headers
+            fputcsv($file, [
+                'Name',
+                'Email',
+                'Phone Number',
+                'Organization/Company',
+                'Role',
+                'First Time',
+                'Attend Year',
+                'Reference',
+                'Tag Number',
+                'Registration Date'
+            ]);
+            
+            // Add data rows
+            foreach ($visitors as $visitor) {
+                fputcsv($file, [
+                    $visitor->name,
+                    $visitor->email,
+                    $visitor->phone_number,
+                    $visitor->organization_company,
+                    $visitor->role,
+                    $visitor->first_time,
+                    $visitor->attend_year,
+                    $visitor->ref,
+                    $visitor->tagnumber,
+                    $visitor->created_at->format('Y-m-d H:i:s')
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
     }
 
 
@@ -218,62 +263,39 @@ class ExpoUserController extends Controller
 
         $selectedAttendyear = $request->input('attend_year', []);
   
-        $tagnumber = Str::random(6);
-
-           
-        if(ExpoUser::where('tagnumber', $tagnumber)->get()){
-
+        // Generate unique tag number
+        do {
             $tagnumber = Str::random(6);
+        } while(ExpoUser::where('tagnumber', $tagnumber)->exists());
 
-            ExpoUser::create([
-                'name' => $request->name,
-                'first_time' => $request->first_time,
-                'attend_year' => json_encode($selectedAttendyear),
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'organization_company' => $request->organization_company,
-                'role' => $request->role,
-                'exhibitor' => $request->exhibitor,
-                'ref' => $request->ref,
-                'tagnumber' => $tagnumber
-            ]);
-    
-    
-          
-    
-            $regData = [
-                'email' => $request->email,
-                'name' => $request->name,
-                'tagnumber' => $tagnumber
-            ];
-    
+        // Create visitor record
+        ExpoUser::create([
+            'name' => $request->name,
+            'first_time' => $request->first_time,
+            'attend_year' => json_encode($selectedAttendyear),
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'organization_company' => $request->organization_company,
+            'role' => $request->role,
+            'exhibitor' => $request->exhibitor,
+            'ref' => $request->ref,
+            'tagnumber' => $tagnumber
+        ]);
+
+        // Prepare registration data for email
+        $regData = [
+            'email' => $request->email,
+            'name' => $request->name,
+            'tagnumber' => $tagnumber
+        ];
+
+        // Send confirmation email with error handling
+        try {
             Mail::to($request->email)->send(new Registered($regData));
-
-        }else{
-
-            ExpoUser::create([
-                'name' => $request->name,
-                'first_time' => $request->first_time,
-                'attend_year' => $request->attend_year,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'organization_company' => $request->organization_company,
-                'role' => $request->role,
-                'exhibitor' => $request->exhibitor,
-                'ref' => $request->ref,
-                'tagnumber' => $tagnumber
-            ]);
-    
-    
-          
-    
-            $regData = [
-                'email' => $request->email,
-                'name' => $request->name,
-                'tagnumber' => $tagnumber
-            ];
-    
-            Mail::to($request->email)->send(new Registered($regData));
+        } catch (\Exception $e) {
+            // Log the error but don't fail the registration
+            Log::error('Failed to send visitor confirmation email: ' . $e->getMessage());
+            // You can also send to admin or handle differently
         }
 
       

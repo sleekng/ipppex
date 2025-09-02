@@ -19,7 +19,7 @@
                     <x-nav-link-primary class="toggleIconall links text-white " :active="request()->routeIs('conference.index')"
                         href="{{ route('conference.index') }}">Conference Brochure</x-nav-link-primary>
                     <x-nav-link-primary class="toggleIconall links text-white " :active="request()->routeIs('exhibitor_list.index')"
-                        href="{{ route('exhibitor_list.index') }}">Exhibitor List 2023</x-nav-link-primary>
+                        href="{{ route('exhibitor_list.index') }}">Exhibitor List 2025</x-nav-link-primary>
 
                         <div class="flex space-x-4">
                             <div>

@@ -34,7 +34,7 @@
                             </x-button>
 
                         </a>
-                        <a href="https://www.showwave.co.za/online/ipppex">
+                        <a href="{{ route('register.visitor') }}">
                             <x-button data-aos="fade-up" data-aos-duration="4000" class=" mt-4 home-btn">
                                 Register as a visitor
                             </x-button>
@@ -62,7 +62,6 @@
                     <div class="text-center">
                         <div class="text-2xl font-bold text-gray-800 mb-2">Theme</div>
                         <div class="text-3xl font-bold text-gray-900 mb-2">DRIVING SUSTAINABLE GROWTH IN PAPER, PRINTING & PUBLISHING SECTOR FOR NATIONAL DEVELOPMENT</div>
-                        <div class="text-xl text-gray-700 mb-4">Navigating the Changing Landscape of the Nigerian Printing Industry</div>
                     </div>
                     
                     <div class="bg-gray-100 px-8 py-4 rounded-lg text-center">
@@ -71,7 +70,7 @@
                     </div>
                     
                     <div class="text-center space-y-2 mb-6">
-                        <div class="text-lg text-gray-800">Lagos Oriental Hotel, Victoria Island, Lagos, Nigeria</div>
+                        <div class="text-lg text-gray-800">The Marquee Tent, Tafawa Balewa Square (TBS) Lagos International Trade Fair, Lagos Island.</div>
                         <div class="text-2xl font-bold  text-gray-800">9AM - 5PM daily</div>
                     </div>
 
@@ -109,7 +108,7 @@
                                 Register as an exhibitor
                             </x-button>
                         </a>
-                        <a href="https://www.showwave.co.za/online/ipppex">
+                        <a href="{{ route('register.visitor') }}">
                             <x-button class="mt-4 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold">
                                 Register as a visitor
                             </x-button>
@@ -405,7 +404,7 @@
                         <div data-aos="fade-up" data-aos-duration="3000"
                             class=" text-center flex justify-center items-center flex-col">
                             <div class=" relative border w-40 md:w-60 rounded-md overflow-hidden">
-                                <img src="storage/img/team/vp.png" alt="">
+                                <img src="storage/img/team/Matilda.jpg" alt="">
                             </div>
                             <div class="w-full flex justify-center flex-col items-center mt-4">
                                 <div class="text-2xl font-bold ">Matilda Obokhai</div>
@@ -415,24 +414,8 @@
                     </div>
                     <div class=" flex justify-center items-center  md:space-x-20">
 
-                        <div data-aos="fade-up" data-aos-duration="2000"
-                            class=" text-center flex justify-center items-center flex-col">
-                            <div class=" relative border w-40 md:w-60 rounded-md overflow-hidden">
-                                <img src="storage/img/precious.jpg" alt="">
-                            </div>
-                            <div class="w-full flex justify-center flex-wrap flex-col text-center items-center mt-4">
-                                <div class="md:text-2xl text-xl font-bold flex-wrap ">MBA PRECIOUS</div>
-                                <div>MEDIA MANAGER</div>
-                                <div class=" flex space-x-4 p-2">
-                                    <a href="tel:+2348064885338" class=" flex justify-center items-center"> <i
-                                            class="fa-light fa-phone"></i></a>
-                                    <a href="mailto:norah@dcsintegratedmedia.com.ng"
-                                        class=" flex justify-center items-center"> <i
-                                            class="fa-light fa-envelope"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-aos="fade-up" data-aos-duration="3000"
+
+                    <div data-aos="fade-up" data-aos-duration="3000"
                             class=" text-center flex justify-center items-center flex-col">
                             <div class=" relative border w-40 md:w-60 rounded-md overflow-hidden">
                                 <img src="storage/img/team/nora.png" alt="">
@@ -450,10 +433,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class=" text-center flex justify-center items-center flex-col">
-                        <div class=" relative border w-40 md:w-60 rounded-md overflow-hidden">
+                    
+                        <div data-aos="fade-up" data-aos-duration="2000"
+                            class=" text-center flex justify-center items-center flex-col">
+                            <div class=" relative border w-40 md:w-60 rounded-md overflow-hidden">
                             <img src="storage/img/chika.jpg" alt="">
                         </div>
                         <div data-aos="fade-up" data-aos-duration="3000"
@@ -468,6 +452,9 @@
                                         class="fa-light fa-envelope"></i></a>
                             </div>
                         </div>
+                        </div>
+
+                      
                     </div>
 
                 </div>
@@ -638,10 +625,18 @@
                 </div>
                 <div data-aos="zoom-in" data-aos-duration="3000" class=" mt-20 flex flex-col items-center justify-center">
                     <h3 class=" uppercase text-4xl md:text-5xl text-center   font-extralight  inline-block ">
-                        PARTNERS
+                    Endorsed by
                     </h3>
                     <div class="  mt-4  flex-wrap space-x-8 flex justify-center">
-                       <span class=" text-4xl font-bold">Printap</span>
+                        <div class=" border w-40">
+                            <img class=" " src="/storage/img/logos/cippon.jpg" alt="">
+                        </div>
+                        <div class=" border w-40">
+                            <img class=" " src="/storage/img/logos/ass.jpg" alt="">
+                        </div>
+                        <div class=" border w-40 mt-4 md:mt-0">
+                            <img class=" " src="/storage/img/logos/npa.jpg" alt="">
+                        </div>
                     </div>
                 </div>
                 <div data-aos="zoom-in" data-aos-duration="3000" class=" mt-20 flex flex-col items-center justify-center">

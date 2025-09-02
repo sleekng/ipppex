@@ -52,7 +52,6 @@
                                 <div class="text-center">
                                     <div class="text-2xl font-bold text-gray-800 mb-2">Theme</div>
                                     <div class="text-3xl font-bold text-gray-900 mb-2">DRIVING SUSTAINABLE GROWTH IN PAPER, PRINTING & PUBLISHING SECTOR FOR NATIONAL DEVELOPMENT</div>
-                                    <div class="text-xl text-gray-700 mb-4">Navigating the Changing Landscape of the Nigerian Printing Industry</div>
                                 </div>
                                 
                                 <div class="bg-gray-100 px-8 py-4 rounded-lg">
@@ -61,7 +60,7 @@
                                 </div>
                                 
                                 <div class="text-center space-y-2 mb-6">
-                                    <div class="text-lg text-gray-800">Lagos Oriental Hotel, Victoria Island, Lagos, Nigeria</div>
+                                    <div class="text-lg text-gray-800">The Marquee Tent, Tafawa Balewa Square (TBS) Lagos International Trade Fair, Lagos Island.</div>
                                     <div class="text-lg text-gray-800">9AM - 5PM daily</div>
                                     <div class="text-lg text-gray-800">Exhibition Space: 1,800 sqm</div>
                                 </div>

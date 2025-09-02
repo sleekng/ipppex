@@ -14,7 +14,7 @@
                     Media & News
                 </div>
                 <small class="text-sm">For Personal Images/Videos request; contact <a class="text-primarycolor"
-                        href="tel:+234 816 976 7741">Olamilekan </a></small>
+                        href="tel:+234 816 976 7741">DCS integrated media </a></small>
             </div>
 
         </div>
